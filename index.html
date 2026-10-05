@@ -1,0 +1,1763 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+
+<head>
+
+    <meta charset="UTF-8">
+
+    <meta name="viewport"
+          content="width=device-width, initial-scale=1.0">
+
+    <title>Quiz — Artigo e Numeral</title>
+
+    <style>
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: Arial, sans-serif;
+        }
+
+        body {
+
+            min-height: 100vh;
+
+            background:
+                linear-gradient(
+                    135deg,
+                    #46178f,
+                    #25004f
+                );
+
+            display: flex;
+
+            justify-content: center;
+
+            align-items: center;
+
+            color: white;
+
+            padding: 20px;
+        }
+
+
+        /* =====================================
+           CONTAINER
+        ===================================== */
+
+        .container {
+
+            width: 100%;
+
+            max-width: 1000px;
+
+            min-height: 600px;
+
+            background: #f5f5f5;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+
+            box-shadow:
+                0 15px 40px
+                rgba(0,0,0,0.35);
+
+            color: #222;
+        }
+
+
+        /* =====================================
+           TELA INICIAL
+        ===================================== */
+
+        #inicio {
+
+            min-height: 600px;
+
+            display: flex;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 40px;
+        }
+
+
+        #inicio h1 {
+
+            font-size: 55px;
+
+            margin-bottom: 15px;
+
+            color: #46178f;
+        }
+
+
+        #inicio h2 {
+
+            font-size: 30px;
+
+            margin-bottom: 15px;
+        }
+
+
+        #inicio p {
+
+            font-size: 18px;
+
+            color: #555;
+
+            margin-bottom: 35px;
+        }
+
+
+        .botao {
+
+            border: none;
+
+            border-radius: 12px;
+
+            padding: 18px 40px;
+
+            font-size: 22px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            color: white;
+
+            background: #46178f;
+
+            transition: 0.2s;
+        }
+
+
+        .botao:hover {
+
+            transform: scale(1.05);
+
+            background: #5b20b8;
+        }
+
+
+        .botao:active {
+
+            transform: scale(0.96);
+        }
+
+
+        /* =====================================
+           QUIZ
+        ===================================== */
+
+        #quiz {
+
+            display: none;
+
+            min-height: 600px;
+        }
+
+
+        /* =====================================
+           TOPO
+        ===================================== */
+
+        .topo {
+
+            background: #46178f;
+
+            color: white;
+
+            padding: 15px 25px;
+
+            display: flex;
+
+            justify-content: space-between;
+
+            align-items: center;
+
+            gap: 15px;
+        }
+
+
+        .questaoNumero {
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        .pontuacao {
+
+            font-size: 18px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================
+           CRONÔMETRO
+        ===================================== */
+
+        .tempoArea {
+
+            padding: 15px 25px;
+
+            background: white;
+        }
+
+
+        .tempoTexto {
+
+            display: flex;
+
+            justify-content: space-between;
+
+            font-weight: bold;
+
+            margin-bottom: 7px;
+        }
+
+
+        .barraTempo {
+
+            width: 100%;
+
+            height: 12px;
+
+            background: #ddd;
+
+            border-radius: 20px;
+
+            overflow: hidden;
+        }
+
+
+        #tempoBarra {
+
+            width: 100%;
+
+            height: 100%;
+
+            background: #22c55e;
+
+            transition:
+                width 0.1s linear;
+        }
+
+
+        /* =====================================
+           PERGUNTA
+        ===================================== */
+
+        .perguntaArea {
+
+            padding: 30px;
+
+            text-align: center;
+        }
+
+
+        #pergunta {
+
+            font-size: 32px;
+
+            line-height: 1.3;
+
+            margin-bottom: 10px;
+        }
+
+
+        /* =====================================
+           ALTERNATIVAS
+        ===================================== */
+
+        .alternativas {
+
+            display: grid;
+
+            grid-template-columns:
+                1fr 1fr;
+
+            gap: 15px;
+
+            padding:
+                0 25px 25px;
+        }
+
+
+        .alternativa {
+
+            min-height: 100px;
+
+            border: none;
+
+            border-radius: 12px;
+
+            color: white;
+
+            font-size: 21px;
+
+            font-weight: bold;
+
+            cursor: pointer;
+
+            padding: 20px;
+
+            text-align: center;
+
+            transition: 0.15s;
+
+            box-shadow:
+                0 5px 0
+                rgba(0,0,0,0.15);
+        }
+
+
+        .alternativa:hover {
+
+            transform:
+                translateY(-3px);
+
+            filter:
+                brightness(1.08);
+        }
+
+
+        .alternativa:active {
+
+            transform:
+                translateY(2px);
+        }
+
+
+        .vermelho {
+
+            background: #e21b3c;
+        }
+
+
+        .azul {
+
+            background: #1368ce;
+        }
+
+
+        .amarelo {
+
+            background: #d89e00;
+        }
+
+
+        .verde {
+
+            background: #26890c;
+        }
+
+
+        .alternativa.desativada {
+
+            cursor: default;
+
+            opacity: 0.75;
+
+            transform: none;
+        }
+
+
+        .alternativa.correta {
+
+            background:
+                #16a34a !important;
+
+            box-shadow:
+                0 0 0 5px
+                rgba(22,163,74,0.25);
+        }
+
+
+        .alternativa.errada {
+
+            background:
+                #dc2626 !important;
+
+            box-shadow:
+                0 0 0 5px
+                rgba(220,38,38,0.25);
+        }
+
+
+        /* =====================================
+           RESULTADO DA PERGUNTA
+        ===================================== */
+
+        #resultadoPergunta {
+
+            display: none;
+
+            text-align: center;
+
+            padding:
+                0 20px 25px;
+
+            font-size: 24px;
+
+            font-weight: bold;
+        }
+
+
+        /* =====================================
+           RESULTADO FINAL
+        ===================================== */
+
+        #resultadoFinal {
+
+            display: none;
+
+            min-height: 600px;
+
+            flex-direction: column;
+
+            justify-content: center;
+
+            align-items: center;
+
+            text-align: center;
+
+            padding: 40px;
+        }
+
+
+        #resultadoFinal h1 {
+
+            font-size: 50px;
+
+            color: #46178f;
+
+            margin-bottom: 20px;
+        }
+
+
+        #resultadoFinal h2 {
+
+            font-size: 35px;
+
+            margin-bottom: 10px;
+        }
+
+
+        #resultadoFinal p {
+
+            font-size: 22px;
+
+            color: #555;
+
+            margin-bottom: 30px;
+        }
+
+
+        .placar {
+
+            background: #eee;
+
+            padding: 25px 50px;
+
+            border-radius: 15px;
+
+            margin-bottom: 30px;
+        }
+
+
+        .placar strong {
+
+            font-size: 45px;
+
+            color: #46178f;
+        }
+
+
+        /* =====================================
+           CELULAR
+        ===================================== */
+
+        @media (max-width: 700px) {
+
+            body {
+
+                padding: 0;
+            }
+
+
+            .container {
+
+                min-height: 100vh;
+
+                min-height: 100dvh;
+
+                border-radius: 0;
+            }
+
+
+            #inicio,
+            #resultadoFinal {
+
+                min-height: 100vh;
+
+                min-height: 100dvh;
+
+                padding: 25px;
+            }
+
+
+            #inicio h1 {
+
+                font-size: 42px;
+            }
+
+
+            #inicio h2 {
+
+                font-size: 25px;
+            }
+
+
+            .topo {
+
+                padding:
+                    12px 15px;
+            }
+
+
+            .questaoNumero,
+            .pontuacao {
+
+                font-size: 15px;
+            }
+
+
+            .perguntaArea {
+
+                padding:
+                    25px 15px 15px;
+            }
+
+
+            #pergunta {
+
+                font-size: 24px;
+            }
+
+
+            .alternativas {
+
+                grid-template-columns: 1fr;
+
+                gap: 12px;
+
+                padding:
+                    0 15px 20px;
+            }
+
+
+            .alternativa {
+
+                min-height: 75px;
+
+                font-size: 18px;
+
+                padding: 15px;
+            }
+
+
+            #resultadoFinal h1 {
+
+                font-size: 38px;
+            }
+
+
+            #resultadoFinal h2 {
+
+                font-size: 28px;
+            }
+
+
+            .placar {
+
+                padding:
+                    20px 35px;
+            }
+
+
+            .placar strong {
+
+                font-size: 38px;
+            }
+
+        }
+
+    </style>
+
+</head>
+
+
+<body>
+
+
+<div class="container">
+
+
+    <!-- =================================
+         INÍCIO
+    ================================== -->
+
+    <div id="inicio">
+
+        <h1>🎮 QUIZ</h1>
+
+        <h2>
+            Artigo e Numeral
+        </h2>
+
+        <p>
+            20 perguntas •
+            Responda rápido para ganhar
+            mais pontos!
+        </p>
+
+        <button
+            class="botao"
+            onclick="iniciarQuiz()">
+
+            ▶ COMEÇAR
+
+        </button>
+
+    </div>
+
+
+    <!-- =================================
+         QUIZ
+    ================================== -->
+
+    <div id="quiz">
+
+
+        <div class="topo">
+
+            <div
+                class="questaoNumero"
+                id="questaoNumero">
+
+                Pergunta 1 de 20
+
+            </div>
+
+
+            <div class="pontuacao">
+
+                🏆
+
+                <span id="pontuacao">
+                    0
+                </span>
+
+            </div>
+
+        </div>
+
+
+        <!-- CRONÔMETRO -->
+
+        <div class="tempoArea">
+
+
+            <div class="tempoTexto">
+
+                <span>
+                    ⏱ Tempo
+                </span>
+
+                <span id="tempoTexto">
+                    15
+                </span>
+
+            </div>
+
+
+            <div class="barraTempo">
+
+                <div
+                    id="tempoBarra">
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- PERGUNTA -->
+
+        <div class="perguntaArea">
+
+            <div id="pergunta">
+
+                Pergunta
+
+            </div>
+
+        </div>
+
+
+        <!-- ALTERNATIVAS -->
+
+        <div class="alternativas">
+
+
+            <button
+                class="alternativa vermelho"
+                onclick="responder(0)">
+
+                <span id="resposta0">
+                    A
+                </span>
+
+            </button>
+
+
+            <button
+                class="alternativa azul"
+                onclick="responder(1)">
+
+                <span id="resposta1">
+                    B
+                </span>
+
+            </button>
+
+
+            <button
+                class="alternativa amarelo"
+                onclick="responder(2)">
+
+                <span id="resposta2">
+                    C
+                </span>
+
+            </button>
+
+
+            <button
+                class="alternativa verde"
+                onclick="responder(3)">
+
+                <span id="resposta3">
+                    D
+                </span>
+
+            </button>
+
+
+        </div>
+
+
+        <div
+            id="resultadoPergunta">
+        </div>
+
+
+    </div>
+
+
+    <!-- =================================
+         RESULTADO FINAL
+    ================================== -->
+
+    <div id="resultadoFinal">
+
+
+        <h1>
+            🏆 FIM!
+        </h1>
+
+
+        <h2>
+            Quiz concluído!
+        </h2>
+
+
+        <p id="mensagemFinal">
+
+            Parabéns!
+
+        </p>
+
+
+        <div class="placar">
+
+            <div>
+                Sua pontuação
+            </div>
+
+            <strong id="pontuacaoFinal">
+                0
+            </strong>
+
+        </div>
+
+
+        <button
+            class="botao"
+            onclick="reiniciarQuiz()">
+
+            🔄 JOGAR NOVAMENTE
+
+        </button>
+
+
+    </div>
+
+
+</div>
+
+
+<script>
+
+
+    /* =====================================================
+       PERGUNTAS DO PDF
+       
+       20 PERGUNTAS
+       
+       correta:
+       0 = A
+       1 = B
+       2 = C
+       3 = D
+    ===================================================== */
+
+
+    const perguntas = [
+
+        {
+            pergunta:
+                "Na frase “O garoto comprou três livros.”, qual é o artigo?",
+
+            respostas: [
+                "garoto",
+                "O",
+                "três",
+                "livros"
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Uma menina ganhou dois presentes.”, qual é o numeral?",
+
+            respostas: [
+                "Uma",
+                "menina",
+                "dois",
+                "presentes"
+            ],
+
+            correta: 2
+        },
+
+
+        {
+            pergunta:
+                "Qual alternativa possui apenas artigos?",
+
+            respostas: [
+                "o, a, os, as",
+                "um, dois, três, quatro",
+                "eu, você, ele, nós",
+                "primeiro, segundo, terceiro, quarto"
+            ],
+
+            correta: 0
+        },
+
+
+        {
+            pergunta:
+                "Qual palavra é um numeral cardinal?",
+
+            respostas: [
+                "primeiro",
+                "dobro",
+                "cinco",
+                "último"
+            ],
+
+            correta: 2
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Comprei uma camisa.”, a palavra “uma” é:",
+
+            respostas: [
+                "artigo",
+                "numeral",
+                "verbo",
+                "adjetivo"
+            ],
+
+            correta: 0
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Tenho duas irmãs.”, a palavra “duas” é:",
+
+            respostas: [
+                "artigo",
+                "numeral",
+                "pronome",
+                "substantivo"
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "Qual frase possui um artigo definido?",
+
+            respostas: [
+                "Comprei uma bola.",
+                "Vi o cachorro.",
+                "Tenho três gatos.",
+                "Ganhei dois livros."
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "Qual frase possui um artigo indefinido?",
+
+            respostas: [
+                "O menino saiu.",
+                "As meninas chegaram.",
+                "Uma pessoa ligou.",
+                "Os alunos estudaram."
+            ],
+
+            correta: 2
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Os quatro alunos chegaram.”, quais são os numerais?",
+
+            respostas: [
+                "Os",
+                "quatro",
+                "alunos",
+                "chegaram"
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "Qual alternativa apresenta somente numerais?",
+
+            respostas: [
+                "um, dois, três",
+                "o, a, um",
+                "primeiro, casa, dois",
+                "menino, três, os"
+            ],
+
+            correta: 0
+        },
+
+
+        {
+            pergunta:
+                "“Primeiro” é um numeral:",
+
+            respostas: [
+                "cardinal",
+                "ordinal",
+                "multiplicativo",
+                "fracionário"
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "“Dobro” é um numeral:",
+
+            respostas: [
+                "cardinal",
+                "ordinal",
+                "multiplicativo",
+                "fracionário"
+            ],
+
+            correta: 2
+        },
+
+
+        {
+            pergunta:
+                "“Metade” indica:",
+
+            respostas: [
+                "quantidade inteira",
+                "ordem",
+                "multiplicação",
+                "fração"
+            ],
+
+            correta: 3
+        },
+
+
+        {
+            pergunta:
+                "Na frase “O terceiro colocado ganhou uma medalha.”, temos:",
+
+            respostas: [
+                "2 artigos e 1 numeral",
+                "1 artigo e 2 numerais",
+                "2 artigos e 2 numerais",
+                "1 artigo e 1 numeral"
+            ],
+
+            correta: 0
+        },
+
+
+        {
+            pergunta:
+                "Qual alternativa apresenta um artigo indefinido?",
+
+            respostas: [
+                "o",
+                "a",
+                "os",
+                "uma"
+            ],
+
+            correta: 3
+        },
+
+
+        {
+            pergunta:
+                "Qual alternativa apresenta um artigo definido?",
+
+            respostas: [
+                "um",
+                "uma",
+                "uns",
+                "as"
+            ],
+
+            correta: 3
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Uns alunos fizeram cinco exercícios.”, temos:",
+
+            respostas: [
+                "1 artigo e 1 numeral",
+                "2 artigos",
+                "2 numerais",
+                "1 artigo e 2 numerais"
+            ],
+
+            correta: 0
+        },
+
+
+        {
+            pergunta:
+                "Qual palavra indica ordem?",
+
+            respostas: [
+                "sete",
+                "dobro",
+                "segundo",
+                "metade"
+            ],
+
+            correta: 2
+        },
+
+
+        {
+            pergunta:
+                "Na frase “Ganhei três chocolates.”, “três” indica:",
+
+            respostas: [
+                "ordem",
+                "quantidade",
+                "divisão",
+                "posição"
+            ],
+
+            correta: 1
+        },
+
+
+        {
+            pergunta:
+                "Na frase “A segunda questão era difícil.”, qual é o numeral?",
+
+            respostas: [
+                "A",
+                "segunda",
+                "questão",
+                "difícil"
+            ],
+
+            correta: 1
+        }
+
+    ];
+
+
+    /* =====================================================
+       CONFIGURAÇÕES
+    ===================================================== */
+
+    let perguntaAtual = 0;
+
+    let pontuacao = 0;
+
+    let tempoRestante = 15;
+
+    let intervalo = null;
+
+    let respondeu = false;
+
+    const TEMPO_POR_PERGUNTA = 15;
+
+
+    /* =====================================================
+       INICIAR
+    ===================================================== */
+
+    function iniciarQuiz() {
+
+
+        perguntaAtual = 0;
+
+        pontuacao = 0;
+
+
+        document.getElementById(
+            "pontuacao"
+        ).textContent = "0";
+
+
+        document.getElementById(
+            "inicio"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "resultadoFinal"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "quiz"
+        ).style.display = "block";
+
+
+        mostrarPergunta();
+
+    }
+
+
+    /* =====================================================
+       MOSTRAR PERGUNTA
+    ===================================================== */
+
+    function mostrarPergunta() {
+
+
+        respondeu = false;
+
+
+        clearInterval(intervalo);
+
+
+        const pergunta =
+            perguntas[
+                perguntaAtual
+            ];
+
+
+        document.getElementById(
+            "questaoNumero"
+        ).textContent =
+
+            "Pergunta " +
+            (perguntaAtual + 1) +
+            " de " +
+            perguntas.length;
+
+
+        document.getElementById(
+            "pontuacao"
+        ).textContent =
+            pontuacao;
+
+
+        document.getElementById(
+            "pergunta"
+        ).textContent =
+            pergunta.pergunta;
+
+
+        /*
+            COLOCA AS RESPOSTAS
+        */
+
+        for (
+            let i = 0;
+            i < 4;
+            i++
+        ) {
+
+
+            const botao =
+                document.querySelectorAll(
+                    ".alternativa"
+                )[i];
+
+
+            botao.classList.remove(
+                "correta"
+            );
+
+
+            botao.classList.remove(
+                "errada"
+            );
+
+
+            botao.classList.remove(
+                "desativada"
+            );
+
+
+            botao.disabled = false;
+
+
+            document.getElementById(
+                "resposta" + i
+            ).textContent =
+                pergunta.respostas[i];
+
+        }
+
+
+        /*
+            ESCONDE RESULTADO
+        */
+
+        const resultado =
+            document.getElementById(
+                "resultadoPergunta"
+            );
+
+
+        resultado.style.display =
+            "none";
+
+
+        resultado.textContent = "";
+
+
+        /*
+            REINICIA TEMPO
+        */
+
+        tempoRestante =
+            TEMPO_POR_PERGUNTA;
+
+
+        atualizarTempo();
+
+
+        intervalo =
+            setInterval(
+                atualizarCronometro,
+                100
+            );
+
+    }
+
+
+    /* =====================================================
+       CRONÔMETRO
+    ===================================================== */
+
+    function atualizarCronometro() {
+
+
+        tempoRestante -= 0.1;
+
+
+        if (
+            tempoRestante <= 0
+        ) {
+
+            tempoRestante = 0;
+
+            atualizarTempo();
+
+            clearInterval(intervalo);
+
+            responder(-1);
+
+            return;
+
+        }
+
+
+        atualizarTempo();
+
+    }
+
+
+    function atualizarTempo() {
+
+
+        document.getElementById(
+            "tempoTexto"
+        ).textContent =
+            Math.ceil(
+                tempoRestante
+            );
+
+
+        document.getElementById(
+            "tempoBarra"
+        ).style.width =
+
+            (
+                tempoRestante /
+                TEMPO_POR_PERGUNTA
+                *
+                100
+            ) + "%";
+
+
+        const barra =
+            document.getElementById(
+                "tempoBarra"
+            );
+
+
+        if (
+            tempoRestante <= 5
+        ) {
+
+            barra.style.background =
+                "#ef4444";
+
+        }
+
+        else if (
+            tempoRestante <= 8
+        ) {
+
+            barra.style.background =
+                "#f59e0b";
+
+        }
+
+        else {
+
+            barra.style.background =
+                "#22c55e";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       RESPONDER
+    ===================================================== */
+
+    function responder(indice) {
+
+
+        if (respondeu)
+            return;
+
+
+        respondeu = true;
+
+
+        clearInterval(intervalo);
+
+
+        const pergunta =
+            perguntas[
+                perguntaAtual
+            ];
+
+
+        const botoes =
+            document.querySelectorAll(
+                ".alternativa"
+            );
+
+
+        /*
+            DESATIVA BOTÕES
+        */
+
+        botoes.forEach(
+            botao => {
+
+                botao.disabled = true;
+
+                botao.classList.add(
+                    "desativada"
+                );
+
+            }
+        );
+
+
+        /*
+            MOSTRA RESPOSTA CORRETA
+        */
+
+        botoes[
+            pergunta.correta
+        ].classList.add(
+            "correta"
+        );
+
+
+        /*
+            ACERTO
+        */
+
+        if (
+            indice ===
+            pergunta.correta
+        ) {
+
+
+            /*
+                Até 1500 pontos:
+
+                1000 pontos base
+                + até 500 de velocidade
+            */
+
+            const bonus =
+                Math.round(
+
+                    (
+                        tempoRestante /
+                        TEMPO_POR_PERGUNTA
+
+                    ) * 500
+
+                );
+
+
+            const pontosGanhos =
+                1000 + bonus;
+
+
+            pontuacao +=
+                pontosGanhos;
+
+
+            document.getElementById(
+                "pontuacao"
+            ).textContent =
+                pontuacao;
+
+
+            mostrarResultado(
+
+                "✅ CORRETO! +" +
+                pontosGanhos +
+                " pontos",
+
+                true
+
+            );
+
+        }
+
+
+        /*
+            ERRO
+        */
+
+        else {
+
+
+            if (
+                indice >= 0
+            ) {
+
+                botoes[
+                    indice
+                ].classList.add(
+                    "errada"
+                );
+
+            }
+
+
+            mostrarResultado(
+
+                indice === -1
+                    ? "⏰ TEMPO ESGOTADO!"
+                    : "❌ ERRADO!",
+
+                false
+
+            );
+
+        }
+
+
+        /*
+            PASSA PARA A PRÓXIMA
+        */
+
+        setTimeout(
+            proximaPergunta,
+            1800
+        );
+
+    }
+
+
+    /* =====================================================
+       RESULTADO DA PERGUNTA
+    ===================================================== */
+
+    function mostrarResultado(
+        texto,
+        acertou
+    ) {
+
+
+        const resultado =
+            document.getElementById(
+                "resultadoPergunta"
+            );
+
+
+        resultado.textContent =
+            texto;
+
+
+        resultado.style.display =
+            "block";
+
+
+        if (acertou) {
+
+            resultado.style.color =
+                "#16a34a";
+
+        }
+
+        else {
+
+            resultado.style.color =
+                "#dc2626";
+
+        }
+
+    }
+
+
+    /* =====================================================
+       PRÓXIMA
+    ===================================================== */
+
+    function proximaPergunta() {
+
+
+        perguntaAtual++;
+
+
+        if (
+            perguntaAtual >=
+            perguntas.length
+        ) {
+
+            finalizarQuiz();
+
+            return;
+
+        }
+
+
+        mostrarPergunta();
+
+    }
+
+
+    /* =====================================================
+       FINALIZAR
+    ===================================================== */
+
+    function finalizarQuiz() {
+
+
+        clearInterval(intervalo);
+
+
+        document.getElementById(
+            "quiz"
+        ).style.display = "none";
+
+
+        document.getElementById(
+            "resultadoFinal"
+        ).style.display = "flex";
+
+
+        document.getElementById(
+            "pontuacaoFinal"
+        ).textContent =
+            pontuacao;
+
+
+        /*
+            MÁXIMO:
+            20 × 1500 = 30000
+        */
+
+        const porcentagem =
+
+            pontuacao /
+            (
+                perguntas.length *
+                1500
+            )
+            *
+            100;
+
+
+        let mensagem;
+
+
+        if (
+            porcentagem >= 80
+        ) {
+
+            mensagem =
+                "🔥 Excelente! Você domina Artigo e Numeral!";
+
+        }
+
+        else if (
+            porcentagem >= 60
+        ) {
+
+            mensagem =
+                "👏 Muito bom! Você está indo muito bem!";
+
+        }
+
+        else if (
+            porcentagem >= 40
+        ) {
+
+            mensagem =
+                "👍 Bom trabalho! Continue estudando!";
+
+        }
+
+        else {
+
+            mensagem =
+                "💪 Estude mais um pouco e tente novamente!";
+
+        }
+
+
+        document.getElementById(
+            "mensagemFinal"
+        ).textContent =
+            mensagem;
+
+    }
+
+
+    /* =====================================================
+       JOGAR NOVAMENTE
+    ===================================================== */
+
+    function reiniciarQuiz() {
+
+
+        clearInterval(intervalo);
+
+
+        document.getElementById(
+            "resultadoFinal"
+        ).style.display =
+            "none";
+
+
+        document.getElementById(
+            "inicio"
+        ).style.display =
+            "flex";
+
+
+        pontuacao = 0;
+
+        perguntaAtual = 0;
+
+    }
+
+</script>
+
+
+</body>
+
+</html>
